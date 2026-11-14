@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ink Sandbox</title>
+  <meta name="description" content="Soltá gotas de tinta que se funden entre sí, soplá burbujas de aire adentro y exportá el resultado como SVG vectorial.">
+  <meta name="author" content="Agustín Amato">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ink Sandbox">
+  <meta property="og:description" content="Drop ink that fuses into liquid shapes, blow air bubbles into it, export clean vector SVG.">
+  <meta property="og:image" content="https://amatosaurio22.github.io/ink-sandbox/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body class="is-intro">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.2c3.6 4.6 6 7.7 6 11a6 6 0 0 1-12 0c0-3.3 2.4-6.4 6-11Z"/></symbol>
+      <symbol id="i-air" viewBox="0 0 24 24"><circle cx="9.5" cy="14" r="5.5"/><circle cx="17.6" cy="6.6" r="2.6"/><circle cx="18.4" cy="16.2" r="1.5"/><path d="M7 11.6a3 3 0 0 1 2.3-1.4"/></symbol>
+      <symbol id="i-stir" viewBox="0 0 24 24"><path d="M12 12.2a1.2 1.2 0 1 1 1.4-1.7 3.1 3.1 0 0 1-4 4A5 5 0 0 1 11.3 5a6.9 6.9 0 0 1 7.4 10"/><path d="M20 18.6l-1.4-3.8-3.8 1.2"/></symbol>
+      <symbol id="i-erase" viewBox="0 0 24 24"><path d="M9.2 19.5 4.6 15a1.6 1.6 0 0 1 0-2.3l7.8-7.8a1.6 1.6 0 0 1 2.3 0l4.6 4.6a1.6 1.6 0 0 1 0 2.3l-7.8 7.7Z"/><path d="M8.5 9.1l6.4 6.4M9.2 19.5H20"/></symbol>
+      <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 6 5 10l4 4"/><path d="M5.5 10H14a5 5 0 0 1 0 10h-3"/></symbol>
+      <symbol id="i-sample" viewBox="0 0 24 24"><path d="M12 3.5 13.6 8l4.6 1.6-4.6 1.6L12 15.7l-1.6-4.5L5.8 9.6 10.4 8 12 3.5Z"/><path d="M18 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"/></symbol>
+      <symbol id="i-clear" viewBox="0 0 24 24"><path d="M4.5 7h15M9.5 7V5.2c0-.7.5-1.2 1.2-1.2h2.6c.7 0 1.2.5 1.2 1.2V7M6.5 7l.8 11.6c.1 1 .9 1.9 2 1.9h5.4c1.1 0 1.9-.9 2-1.9L17.5 7"/></symbol>
+      <symbol id="i-guides" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5.5v13M15 5.5v13"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5L8 5.5Z"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3.5v11M8 7.5l4-4 4 4"/><path d="M8.5 10.5H7a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1.5"/></symbol>
+      <symbol id="i-mutate" viewBox="0 0 24 24"><path d="M3.5 7.5h3.6c4.6 0 4.6 9 9.2 9h3.2M3.5 16.5h3.6c1.6 0 2.6-1.1 3.4-2.6M13.6 10.1c.8-1.5 1.8-2.6 3.4-2.6h2.5"/><path d="m17.5 5 2.5 2.5-2.5 2.5M17.5 14l2.5 2.5-2.5 2.5"/></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17"/></symbol>
+      <symbol id="i-out" viewBox="0 0 24 24"><path d="M8 16 16 8M9.5 8H16v6.5"/></symbol>
+    </defs>
+  </svg>
+
+  <canvas id="press" data-i18n-label="canvas.label" role="img" aria-label="Lienzo de tinta"></canvas>
+
+  <div class="hero" aria-hidden="true">
+    <p class="hero-title">Ink Sandbox</p>
+    <p class="hero-sub" data-i18n="hero.sub">Soltá tinta. Soplá burbujas. Exportá en vector.</p>
+  </div>
+  <p class="invite" id="invite"><span id="inviteText" data-i18n="invite">Hacé clic y arrastrá para soltar tinta</span></p>
+
+  <header class="topbar">
+    <div class="titlebar glass">
+      <h1 class="app-name">Ink Sandbox</h1>
+      <p class="counter" id="counter">0 gotas</p>
+      <span class="frozen-tag" id="frozenTag" data-i18n="frozen" hidden>En pausa</span>
+    </div>
+    <div class="topbar-end">
+      <div class="actions glass">
+        <button class="icon-btn" id="btnUndo" data-i18n-title="undo.title" data-i18n-label="undo" disabled>
+          <svg class="ico" aria-hidden="true"><use href="#i-undo"/></svg><span class="badge" id="undoCount"></span>
+        </button>
+        <button class="icon-btn" id="btnSample" data-i18n-title="sample.title" data-i18n-label="sample"><svg class="ico" aria-hidden="true"><use href="#i-sample"/></svg></button>
+        <button class="icon-btn" id="btnClear" data-i18n-title="clear.title" data-i18n-label="clear"><svg class="ico" aria-hidden="true"><use href="#i-clear"/></svg></button>
+        <button class="icon-btn" id="btnGuides" aria-pressed="false" data-i18n-title="guides.title" data-i18n-label="guides"><svg class="ico" aria-hidden="true"><use href="#i-guides"/></svg></button>
+        <span class="sep" aria-hidden="true"></span>
+        <button class="segmented" id="btnLang" data-i18n-label="lang.switch" aria-label="Switch to English">
+          <span class="lang-opt" data-lang="es">ES</span><span class="lang-opt" data-lang="en">EN</span>
+        </button>
+      </div>
+      <button class="btn-export" id="btnSVG" data-i18n-title="export.svg.title"><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg><span data-i18n="export.svg">Exportar SVG</span></button>
+    </div>
+  </header>
+
+  <nav class="toolbar glass" data-i18n-label="tool" aria-label="Herramienta">
+    <div class="tools" role="radiogroup" data-i18n-label="tool">
+      <button class="tool" role="radio" aria-checked="true" data-tool="drop" data-i18n-title="tool.drop.title"><svg class="ico" aria-hidden="true"><use href="#i-drop"/></svg><span class="tool-label" data-i18n="tool.drop">Gotero</span></button>
+      <button class="tool" role="radio" aria-checked="false" data-tool="air" data-i18n-title="tool.air.title"><svg class="ico" aria-hidden="true"><use href="#i-air"/></svg><span class="tool-label" data-i18n="tool.air">Aire</span></button>
+      <button class="tool" role="radio" aria-checked="false" data-tool="stir" data-i18n-title="tool.stir.title"><svg class="ico" aria-hidden="true"><use href="#i-stir"/></svg><span class="tool-label" data-i18n="tool.stir">Remover</span></button>
+      <button class="tool" role="radio" aria-checked="false" data-tool="erase" data-i18n-title="tool.erase.title"><svg class="ico" aria-hidden="true"><use href="#i-erase"/></svg><span class="tool-label" data-i18n="tool.erase">Borrar</span></button>
+    </div>
+    <span class="sep" aria-hidden="true"></span>
+    <button class="tool" id="btnFreeze" aria-pressed="false" data-i18n-title="freeze.title"><svg class="ico" aria-hidden="true"><use href="#i-pause"/></svg><span class="tool-label" id="freezeLabel" data-i18n="freeze">Pausa</span></button>
+    <button class="tool" id="panelToggle" aria-controls="panel" aria-expanded="false" data-i18n-title="panel.open"><svg class="ico" aria-hidden="true"><use href="#i-sliders"/></svg><span class="tool-label" data-i18n="panel.short">Ajustes</span></button>
+  </nav>
+
+  <aside class="panel glass" id="panel" aria-labelledby="panelTitle">
+    <div class="grabber" aria-hidden="true"></div>
+    <div class="panel-head">
+      <h2 id="panelTitle" data-i18n="panel.open">Ajustes de tinta</h2>
+      <button class="close-btn" id="panelClose" data-i18n-label="panel.close" aria-label="Cerrar"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+
+    <div class="panel-body">
+      <section class="group-wrap">
+        <h3 class="group-title" data-i18n="brush">Pincel</h3>
+        <div class="group">
+          <div class="field">
+            <label for="size" data-i18n="size">Tamaño</label>
+            <output for="size" id="size-out">34 px</output>
+            <input type="range" id="size" min="12" max="85" step="1" value="34">
+          </div>
+        </div>
+      </section>
+
+      <section class="group-wrap">
+        <h3 class="group-title" data-i18n="ink">Tinta</h3>
+        <div class="group">
+          <div class="field">
+            <label for="cohesion" data-i18n="cohesion">Cohesión</label>
+            <output for="cohesion" id="cohesion-out">60%</output>
+            <input type="range" id="cohesion" min="0" max="100" step="1" value="60">
+          </div>
+          <div class="field">
+            <label for="bloat" data-i18n="bloat">Volumen</label>
+            <output for="bloat" id="bloat-out">+10%</output>
+            <input type="range" id="bloat" min="-35" max="110" step="1" value="10">
+          </div>
+          <div class="field">
+            <label for="noise" data-i18n="noise">Movimiento</label>
+            <output for="noise" id="noise-out">16%</output>
+            <input type="range" id="noise" min="0" max="100" step="1" value="16">
+          </div>
+          <div class="field">
+            <label for="anchor" data-i18n="anchor">Memoria</label>
+            <output for="anchor" id="anchor-out">70%</output>
+            <input type="range" id="anchor" min="15" max="100" step="1" value="70">
+          </div>
+          <div class="field">
+            <label for="gloss" data-i18n="gloss">Brillo</label>
+            <output for="gloss" id="gloss-out">60%</output>
+            <input type="range" id="gloss" min="0" max="100" step="1" value="60">
+          </div>
+        </div>
+        <button class="btn" id="btnMutate" data-i18n-title="mutate.title"><svg class="ico" aria-hidden="true"><use href="#i-mutate"/></svg><span data-i18n="mutate">Variar forma</span></button>
+      </section>
+
+      <section class="group-wrap">
+        <h3 class="group-title"><span data-i18n="color">Color</span> <span class="hex" id="inkHex">#FFFFFF</span></h3>
+        <div class="group group-row">
+          <div class="swatches" id="palettes" role="radiogroup" data-i18n-label="color"></div>
+          <label class="picker"><span class="sr-only" data-i18n="custom">Color de tinta propio</span><input type="color" id="inkPicker" value="#ffffff" data-i18n-title="custom"></label>
+        </div>
+      </section>
+
+      <section class="group-wrap">
+        <button class="btn" id="btnPNG" data-i18n-title="export.png.title"><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg><span data-i18n="export.png">Exportar PNG</span></button>
+        <p class="keys"><span data-i18n="keys.list"></span></p>
+        <p class="panel-credit"><span data-i18n="credits">Hecho por</span> <a class="author-link" rel="author">Agustín Amato</a></p>
+      </section>
+    </div>
+  </aside>
+
+  <footer class="colophon">
+    <p><span data-i18n="credits">Hecho por</span> <a class="author-link" rel="author">Agustín Amato</a><span class="source-wrap" hidden> · <a class="source-link"><span data-i18n="source">Código</span><svg class="ico ico-sm" aria-hidden="true"><use href="#i-out"/></svg></a></span></p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <noscript><p class="noscript">Ink Sandbox needs JavaScript to run the ink. / Ink Sandbox necesita JavaScript para mover la tinta.</p></noscript>
+</body>
+</html>

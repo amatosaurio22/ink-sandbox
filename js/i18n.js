@@ -1,0 +1,158 @@
+// Interface copy, Spanish and English. Elements opt in with data-i18n (text),
+// data-i18n-label (aria-label) and data-i18n-title (title tooltip).
+
+export const STRINGS = {
+  es: {
+    'doc.title': 'Ink Sandbox',
+    'doc.description': 'Soltá gotas de tinta que se funden entre sí, soplá burbujas de aire adentro y exportá el resultado como SVG vectorial.',
+    'canvas.label': 'Lienzo de tinta. Hacé clic o tocá para soltar tinta.',
+    'hero.sub': 'Soltá tinta. Soplá burbujas. Exportá en vector.',
+    'invite': 'Hacé clic y arrastrá para soltar tinta',
+    'invite.touch': 'Tocá y arrastrá para soltar tinta',
+    'panel.open': 'Ajustes de tinta',
+    'panel.short': 'Ajustes',
+    'panel.close': 'Cerrar',
+    'drop': 'gota',
+    'drops': 'gotas',
+    'bubble': 'burbuja',
+    'bubbles': 'burbujas',
+    'frozen': 'En pausa',
+    'undo': 'Deshacer',
+    'undo.title': 'Deshacer (⌘Z)',
+    'sample': 'Ejemplo',
+    'sample.title': 'Cargar una forma de ejemplo',
+    'clear': 'Borrar todo',
+    'clear.title': 'Borrar todo (C)',
+    'guides': 'Estructura',
+    'guides.title': 'Mostrar la estructura: gotas, anclas y burbujas (G)',
+    'lang.switch': 'Switch to English',
+    'tool': 'Herramientas',
+    'tool.drop': 'Gotero',
+    'tool.drop.title': 'Gotero (1). Clic para una gota, mantené para que crezca, arrastrá para dibujar.',
+    'tool.air': 'Aire',
+    'tool.air.title': 'Aire (2). Soplá burbujas dentro de la tinta. Mantené para inflar, arrastrá para hacer espuma.',
+    'tool.stir': 'Mover',
+    'tool.stir.title': 'Mover (3). Arrastrá para estirar y juntar la tinta.',
+    'tool.erase': 'Goma',
+    'tool.erase.title': 'Goma (4). Borra tinta y burbujas.',
+    'brush': 'Pincel',
+    'size': 'Tamaño',
+    'ink': 'Tinta',
+    'cohesion': 'Cohesión',
+    'bloat': 'Volumen',
+    'noise': 'Movimiento',
+    'anchor': 'Memoria',
+    'gloss': 'Brillo',
+    'mutate': 'Variar forma',
+    'mutate.title': 'Variar tamaños y uniones sin romper la forma (R)',
+    'color': 'Color',
+    'custom': 'Elegir otro color',
+    'freeze': 'Pausa',
+    'resume': 'Seguir',
+    'freeze.title': 'Pausar o seguir (Espacio)',
+    'export.svg': 'Exportar SVG',
+    'export.svg.title': 'Descargar un SVG vectorial; las burbujas quedan como huecos (S)',
+    'export.png': 'Exportar PNG',
+    'export.png.title': 'Descargar el lienzo como imagen PNG',
+    'keys.list': '1–4 herramientas · ⌘Z deshacer · Espacio pausa · R variar · G estructura · C borrar todo · S exportar · rueda del mouse: tamaño',
+    'credits': 'Hecho por',
+    'source': 'Código',
+    'empty': 'Lienzo vacío. Soltá la primera gota.',
+    'full': 'Llegaste a 1.000 gotas. Borrá un poco para seguir.',
+    'air.hint': 'El aire se sopla dentro de la tinta',
+    'exported': 'SVG descargado',
+    'exported.png': 'PNG descargado',
+    'nothing': 'Todavía no hay tinta para exportar',
+    'palette.white': 'Blanco sobre negro', 'palette.black': 'Negro sobre papel', 'palette.acid': 'Lima sobre negro',
+    'palette.vermilion': 'Rojo sobre negro', 'palette.klein': 'Azul sobre papel',
+  },
+  en: {
+    'doc.title': 'Ink Sandbox',
+    'doc.description': 'Drop ink that fuses into liquid shapes, blow air bubbles into it, and export the result as vector SVG.',
+    'canvas.label': 'Ink canvas. Click or tap to drop ink.',
+    'hero.sub': 'Drop ink. Blow bubbles. Export as vector.',
+    'invite': 'Click and drag to drop ink',
+    'invite.touch': 'Tap and drag to drop ink',
+    'panel.open': 'Ink settings',
+    'panel.short': 'Settings',
+    'panel.close': 'Close',
+    'drop': 'drop',
+    'drops': 'drops',
+    'bubble': 'bubble',
+    'bubbles': 'bubbles',
+    'frozen': 'Paused',
+    'undo': 'Undo',
+    'undo.title': 'Undo (⌘Z)',
+    'sample': 'Example',
+    'sample.title': 'Load an example shape',
+    'clear': 'Clear all',
+    'clear.title': 'Clear all (C)',
+    'guides': 'Structure',
+    'guides.title': 'Show the structure: drops, anchors and bubbles (G)',
+    'lang.switch': 'Cambiar a español',
+    'tool': 'Tools',
+    'tool.drop': 'Dropper',
+    'tool.drop.title': 'Dropper (1). Click for a drop, hold to let it grow, drag to draw.',
+    'tool.air': 'Air',
+    'tool.air.title': 'Air (2). Blow bubbles into the ink. Hold to inflate, drag to make foam.',
+    'tool.stir': 'Move',
+    'tool.stir.title': 'Move (3). Drag to stretch and gather the ink.',
+    'tool.erase': 'Eraser',
+    'tool.erase.title': 'Eraser (4). Removes ink and bubbles.',
+    'brush': 'Brush',
+    'size': 'Size',
+    'ink': 'Ink',
+    'cohesion': 'Cohesion',
+    'bloat': 'Volume',
+    'noise': 'Motion',
+    'anchor': 'Memory',
+    'gloss': 'Gloss',
+    'mutate': 'Vary shape',
+    'mutate.title': 'Vary sizes and joins without breaking the shape (R)',
+    'color': 'Color',
+    'custom': 'Pick another color',
+    'freeze': 'Pause',
+    'resume': 'Resume',
+    'freeze.title': 'Pause or resume (Space)',
+    'export.svg': 'Export SVG',
+    'export.svg.title': 'Download a vector SVG; bubbles stay as holes (S)',
+    'export.png': 'Export PNG',
+    'export.png.title': 'Download the canvas as a PNG image',
+    'keys.list': '1–4 tools · ⌘Z undo · Space pause · R vary · G structure · C clear all · S export · scroll: size',
+    'credits': 'Made by',
+    'source': 'Source',
+    'empty': 'Empty canvas. Drop the first ink.',
+    'full': 'You reached 1,000 drops. Erase some to keep going.',
+    'air.hint': 'Air goes inside the ink',
+    'exported': 'SVG downloaded',
+    'exported.png': 'PNG downloaded',
+    'nothing': 'No ink to export yet',
+    'palette.white': 'White on black', 'palette.black': 'Black on paper', 'palette.acid': 'Lime on black',
+    'palette.vermilion': 'Red on black', 'palette.klein': 'Blue on paper',
+  },
+};
+
+const KEY = 'ink-sandbox.lang';
+
+export function initialLang() {
+  const url = new URLSearchParams(location.search).get('lang');
+  if (url === 'es' || url === 'en') return url;
+  try {
+    const saved = localStorage.getItem(KEY);
+    if (saved === 'es' || saved === 'en') return saved;
+  } catch {}
+  return (navigator.language || 'en').toLowerCase().startsWith('es') ? 'es' : 'en';
+}
+
+export function saveLang(lang) {
+  try { localStorage.setItem(KEY, lang); } catch {}
+}
+
+export function applyLang(lang, root = document) {
+  const t = STRINGS[lang];
+  document.documentElement.lang = lang;
+  document.title = t['doc.title'];
+  root.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t[el.dataset.i18n]; });
+  root.querySelectorAll('[data-i18n-label]').forEach((el) => el.setAttribute('aria-label', t[el.dataset.i18nLabel]));
+  root.querySelectorAll('[data-i18n-title]').forEach((el) => el.setAttribute('title', t[el.dataset.i18nTitle]));
+}
