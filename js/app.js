@@ -47,6 +47,7 @@ function setLang(lang) {
   lastCount = '';
   syncCount();
   buildPalettes();
+  if (press.settings.finish === 'chrome') $('inkHex').textContent = t('palette.chrome');
 }
 
 function countCopy() {
@@ -439,7 +440,7 @@ function boot() {
   resize();
   window.addEventListener('resize', resize);
 
-  setInk(press.settings.ink, press.settings.ground);
+  setInk(press.settings.ink, press.settings.ground, press.settings.finish);
   setLang(state.lang);
 
   bindRange('size', (v) => `${v} px`, (v) => { state.size = v; });

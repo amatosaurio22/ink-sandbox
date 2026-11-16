@@ -26,7 +26,7 @@ export function createPress(canvas) {
     sharp: document.createElement('canvas'),
     metal: document.createElement('canvas'),
     metalPixels: null,
-    settings: { ink: '#ffffff', ground: '#0a0a0b', gloss: 0.6, finish: 'ink' },
+    settings: { ink: '#e6cfae', ground: '#0d0a08', gloss: 0.6, finish: 'chrome' },
   };
 }
 

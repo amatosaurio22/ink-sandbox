@@ -35,7 +35,7 @@ Opened from a portfolio or GitHub link, mostly on desktop with a mouse or trackp
 - Tools: dropper (click, hold to swell, drag to trail with splatter), air (blow bubbles into existing ink: click, hold to inflate, drag for foam; bubbles are real holes that push the ink aside), stir (drag moves drops, bubbles and anchors), erase.
 - Parameters: brush size (12-85 px, mouse wheel), cohesion, bloat, organic noise, anchor memory, gloss (render-only shading and reflections; SVG export stays a flat compound path).
 - Actions: undo (50 states, Ctrl/Cmd+Z), random mutation (R), freeze physics (Space), structure view (G), clear (C), sample cluster, export SVG (S).
-- One ink at a time. Palettes: white on charcoal (default), black on paper, lime on black, red on black, blue on paper, plus a custom ink colour.
+- One ink at a time. Palettes: Desert Chrome (default), white on charcoal, black on paper, lime on black, red on black, blue on paper, plus a custom ink colour.
 - Max 1000 drops; 8 px field grid.
 - Interface must be bilingual ES/EN, defaulting to the browser language.
 
@@ -60,4 +60,4 @@ Opened from a portfolio or GitHub link, mostly on desktop with a mouse or trackp
 
 - The user explicitly prefers a single ink, mainly white on a dark ground, as in the original prototype. A two-colour risograph treatment was tried and rejected (2026-11-03). Do not reintroduce multi-ink printing as the default.
 - 2026-11-14: the user asked for an Apple-like interface that does not look machine-made: system font, floating glass bars, bottom toolbar, grouped inspector, iOS sliders, system blue. The brutalist wordmark, mono labels and acid accent were removed.
-- 2026-11-16: added a Desert Chrome finish (liquid metal reflecting sky, horizon and dunes) as a sixth palette; white ink stays the default.
+- 2026-11-16: added a Desert Chrome finish (liquid metal reflecting sky, horizon and dunes) as a sixth palette; later the same day the user made it the default finish.
