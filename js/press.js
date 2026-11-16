@@ -10,6 +10,8 @@ export const PALETTES = [
   { id: 'acid', ink: '#d4ff00', ground: '#0a0a0b', light: false },
   { id: 'vermilion', ink: '#ff3300', ground: '#0a0a0b', light: false },
   { id: 'klein', ink: '#0038ff', ground: '#f2f2ee', light: true },
+  // Liquid metal reflecting a desert. `ink` is the flat colour the SVG falls back to.
+  { id: 'chrome', ink: '#e6cfae', ground: '#0d0a08', light: false, finish: 'chrome' },
 ];
 
 export function createPress(canvas) {
@@ -22,12 +24,15 @@ export function createPress(canvas) {
     // Gloss is painted on low-resolution layers; upscaling them is the blur.
     soft: document.createElement('canvas'),
     sharp: document.createElement('canvas'),
-    settings: { ink: '#ffffff', ground: '#0a0a0b', gloss: 0.6 },
+    metal: document.createElement('canvas'),
+    metalPixels: null,
+    settings: { ink: '#ffffff', ground: '#0a0a0b', gloss: 0.6, finish: 'ink' },
   };
 }
 
 const SOFT = 0.25;
 const SHARP = 0.5;
+const METAL = 1;
 // Light comes from the upper left.
 const LIGHT = { x: -0.6, y: -0.8 };
 
@@ -44,16 +49,24 @@ export function resizePress(press, width, height) {
   press.soft.height = Math.ceil(height * SOFT);
   press.sharp.width = Math.ceil(width * SHARP);
   press.sharp.height = Math.ceil(height * SHARP);
+  press.metal.width = Math.ceil(width * METAL);
+  press.metal.height = Math.ceil(height * METAL);
+  press.metalPixels = null;
 }
 
 // specData: the field traced at a higher iso, i.e. where the ink pools deepest.
-export function print(press, pathData, specData) {
+// field: the ink simulation, which the chrome finish reads its relief from.
+export function print(press, pathData, specData, field) {
   const { ctx, dpr, settings } = press;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.fillStyle = settings.ground;
   ctx.fillRect(0, 0, press.width, press.height);
   if (!pathData) return;
   const ink = new Path2D(pathData);
+  if (settings.finish === 'chrome' && field) {
+    chrome(press, ink, field);
+    return;
+  }
   ctx.fillStyle = settings.gloss > 0.01 ? bodyTone(settings) : settings.ink;
   ctx.fill(ink, 'evenodd');
   if (settings.gloss > 0.01) gloss(press, ink, specData ? new Path2D(specData) : null);
@@ -68,6 +81,123 @@ function bodyTone({ ink, ground, gloss }) {
   const b = hexRGB(ground);
   const k = 0.06 * gloss;
   return `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * k)).join(',')})`;
+}
+
+// ---------- desert chrome ----------
+
+// The environment the metal reflects, by elevation: sky above the horizon,
+// dunes below it, the horizon itself a hard cream line.
+const SKY = [[0, [255, 250, 238]], [0.08, [250, 232, 204]], [0.3, [222, 204, 190]], [0.6, [140, 160, 192]], [1, [70, 98, 146]]];
+const DUNES = [[0, [22, 13, 8]], [0.16, [52, 29, 16]], [0.4, [138, 80, 40]], [0.7, [214, 146, 84]], [1, [252, 214, 160]]];
+
+function ramp(stops, t, out) {
+  let i = 1;
+  while (i < stops.length - 1 && t > stops[i][0]) i++;
+  const [t0, a] = stops[i - 1];
+  const [t1, b] = stops[i];
+  const k = Math.min(1, Math.max(0, (t - t0) / (t1 - t0)));
+  out[0] = a[0] + (b[0] - a[0]) * k;
+  out[1] = a[1] + (b[1] - a[1]) * k;
+  out[2] = a[2] + (b[2] - a[2]) * k;
+}
+
+// The field read as a height map: steep where the ink falls away at its edges
+// and around bubbles, nearly flat where it pools. Each pixel's surface normal
+// picks what it reflects, like a matcap, so the horizon bends over every shape.
+function chrome(press, ink, field) {
+  const { ctx, metal, width, height, settings } = press;
+  const { cols, rows, field: F, time } = field;
+  const mw = metal.width;
+  const mh = metal.height;
+  const m = metal.getContext('2d');
+  if (!press.metalPixels) press.metalPixels = m.createImageData(mw, mh);
+  const px = press.metalPixels.data;
+  px.fill(0);
+
+  // Height per grid point, then its slope.
+  const n = cols * rows;
+  if (!field.h || field.h.length !== n) {
+    field.h = new Float32Array(n);
+    field.tmp = new Float32Array(n);
+    field.gx = new Float32Array(n);
+    field.gy = new Float32Array(n);
+  }
+  const { h, tmp, gx, gy } = field;
+  for (let i = 0; i < n; i++) h[i] = F[i] / (F[i] + 1.1);
+  // Smooth the relief so the edge noise moves the outline without roughening the metal.
+  for (let pass = 0; pass < 3; pass++) {
+    for (let r = 0; r < rows; r++) {
+      const o = r * cols;
+      for (let c = 1; c < cols - 1; c++) tmp[o + c] = (h[o + c - 1] + 2 * h[o + c] + h[o + c + 1]) * 0.25;
+    }
+    for (let r = 1; r < rows - 1; r++) {
+      const o = r * cols;
+      for (let c = 1; c < cols - 1; c++) h[o + c] = (tmp[o + c - cols] + 2 * tmp[o + c] + tmp[o + c + cols]) * 0.25;
+    }
+  }
+  for (let r = 1; r < rows - 1; r++) {
+    for (let c = 1; c < cols - 1; c++) {
+      const i = r * cols + c;
+      gx[i] = (h[i + 1] - h[i - 1]) / (2 * GRID);
+      gy[i] = (h[i + cols] - h[i - cols]) / (2 * GRID);
+    }
+  }
+
+  const relief = 70 + 110 * settings.gloss;
+  const drift = Math.sin(time * 0.6) * 0.04;
+  const col = [0, 0, 0];
+  const low = [0, 0, 0];
+  for (let y = 0; y < mh; y++) {
+    const v = (y + 0.5) / METAL / GRID;
+    const r0 = Math.floor(v);
+    if (r0 < 1 || r0 >= rows - 2) continue;
+    const fy = v - r0;
+    for (let x = 0; x < mw; x++) {
+      const u = (x + 0.5) / METAL / GRID;
+      const c0 = Math.floor(u);
+      if (c0 < 1 || c0 >= cols - 2) continue;
+      const i = r0 * cols + c0;
+      if (F[i] < 0.25 && F[i + 1] < 0.25 && F[i + cols] < 0.25 && F[i + cols + 1] < 0.25) continue;
+      const fx = u - c0;
+      const w00 = (1 - fx) * (1 - fy), w10 = fx * (1 - fy), w01 = (1 - fx) * fy, w11 = fx * fy;
+      const sx = (gx[i] * w00 + gx[i + 1] * w10 + gx[i + cols] * w01 + gx[i + cols + 1] * w11) * relief;
+      const sy = (gy[i] * w00 + gy[i + 1] * w10 + gy[i + cols] * w01 + gy[i + cols + 1] * w11) * relief;
+      const len = Math.sqrt(sx * sx + sy * sy + 1);
+      const nx = -sx / len;
+      const ny = -sy / len;
+
+      // Elevation of what this point reflects: up-facing sees sky, down-facing sees dunes.
+      const e = -ny * 1.15 + 0.16 + nx * 0.08 + drift;
+      // Sky and dunes meet at a hard but antialiased horizon.
+      ramp(SKY, Math.max(0, e), col);
+      ramp(DUNES, Math.max(0, -e) * 1.4, low);
+      const k = Math.min(1, Math.max(0, (e + 0.03) / 0.06));
+      col[0] = low[0] + (col[0] - low[0]) * k;
+      col[1] = low[1] + (col[1] - low[1]) * k;
+      col[2] = low[2] + (col[2] - low[2]) * k;
+
+      // The sun, low over the horizon on the left.
+      const dx = nx + 0.42;
+      const de = e - 0.22;
+      const sun = Math.exp(-(dx * dx + de * de) * 90);
+      // Grazing edges catch more light (a little Fresnel).
+      const rim = (1 - 1 / len) * 0.35;
+
+      const o = (y * mw + x) * 4;
+      px[o] = Math.min(255, col[0] + (255 - col[0]) * (sun + rim * 0.5));
+      px[o + 1] = Math.min(255, col[1] + (255 - col[1]) * (sun * 0.95 + rim * 0.4));
+      px[o + 2] = Math.min(255, col[2] + (255 - col[2]) * (sun * 0.8 + rim * 0.3));
+      px[o + 3] = 255;
+    }
+  }
+  m.putImageData(press.metalPixels, 0, 0);
+
+  ctx.save();
+  ctx.clip(ink, 'evenodd');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(metal, 0, 0, width, height);
+  ctx.restore();
 }
 
 function hexRGB(hex) {
@@ -235,13 +365,23 @@ function download(blob, name) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+// A flat stand-in for the chrome in vector form: sky, horizon, dunes.
+const CHROME_SVG = `  <defs>
+    <linearGradient id="desert-chrome" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#607aa0"/><stop offset="0.3" stop-color="#d6c6ba"/>
+      <stop offset="0.5" stop-color="#fff6e4"/><stop offset="0.52" stop-color="#26160e"/>
+      <stop offset="0.7" stop-color="#a86636"/><stop offset="1" stop-color="#f8d29c"/>
+    </linearGradient>
+  </defs>
+`;
+
 // One compound path, even-odd, so bubbles and gaps stay real holes in Figma or Illustrator.
 export function exportSVG(press, pathData, meta) {
   const { width: w, height: h, settings } = press;
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
   <metadata>${JSON.stringify(meta).replace(/</g, '\\u003c')}</metadata>
-  <path fill="${settings.ink}" fill-rule="evenodd" d="${pathData}"/>
+${settings.finish === 'chrome' ? CHROME_SVG : ''}  <path fill="${settings.finish === 'chrome' ? 'url(#desert-chrome)' : settings.ink}" fill-rule="evenodd" d="${pathData}"/>
 </svg>
 `;
   download(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }), `ink-sandbox-${stamp()}.svg`);

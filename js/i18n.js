@@ -64,7 +64,7 @@ export const STRINGS = {
     'exported.png': 'PNG descargado',
     'nothing': 'Todavía no hay tinta para exportar',
     'palette.white': 'Blanco sobre negro', 'palette.black': 'Negro sobre papel', 'palette.acid': 'Lima sobre negro',
-    'palette.vermilion': 'Rojo sobre negro', 'palette.klein': 'Azul sobre papel',
+    'palette.vermilion': 'Rojo sobre negro', 'palette.klein': 'Azul sobre papel', 'palette.chrome': 'Cromo desierto',
   },
   en: {
     'doc.title': 'Ink Sandbox',
@@ -128,7 +128,7 @@ export const STRINGS = {
     'exported.png': 'PNG downloaded',
     'nothing': 'No ink to export yet',
     'palette.white': 'White on black', 'palette.black': 'Black on paper', 'palette.acid': 'Lime on black',
-    'palette.vermilion': 'Red on black', 'palette.klein': 'Blue on paper',
+    'palette.vermilion': 'Red on black', 'palette.klein': 'Blue on paper', 'palette.chrome': 'Desert chrome',
   },
 };
 

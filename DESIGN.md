@@ -23,7 +23,9 @@ A full-bleed ink canvas with floating, Apple-style glass chrome. The ink is the 
 
 Glass is `backdrop-filter: blur(28px) saturate(180%)` with a 0.5px edge, a soft drop shadow and a 0.5px inner top highlight. Accent marks the selected tool, toggled states, slider fill, focus ring and the one primary button, Export SVG.
 
-Ink palettes (`js/press.js`): white on #0a0a0b (default), black on #f2f2ee, lime #d4ff00 on black, red #ff3300 on black, blue #0038ff on #f2f2ee, plus any custom ink.
+Ink palettes (`js/press.js`): white on #0a0a0b (default), black on #f2f2ee, lime #d4ff00 on black, red #ff3300 on black, blue #0038ff on #f2f2ee, Desert Chrome on #0d0a08, plus any custom ink.
+
+**Desert Chrome** (`chrome()` in `js/press.js`): the field read as a smoothed height map, each pixel's normal used as a matcap lookup into a desert environment. Sky ramps from cream at the horizon to dusty blue (#465f92) overhead; dunes from near-black brown under the horizon (#160d08) to bright sand (#fcd6a0) at down-facing edges; a low sun glint on the left and a slight Fresnel lift at grazing edges. Brillo sets the relief depth. The SVG gets a vertical sky-horizon-dune gradient as its vector stand-in.
 
 ## Type
 

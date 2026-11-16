@@ -60,3 +60,4 @@ Opened from a portfolio or GitHub link, mostly on desktop with a mouse or trackp
 
 - The user explicitly prefers a single ink, mainly white on a dark ground, as in the original prototype. A two-colour risograph treatment was tried and rejected (2026-11-03). Do not reintroduce multi-ink printing as the default.
 - 2026-11-14: the user asked for an Apple-like interface that does not look machine-made: system font, floating glass bars, bottom toolbar, grouped inspector, iOS sliders, system blue. The brutalist wordmark, mono labels and acid accent were removed.
+- 2026-11-16: added a Desert Chrome finish (liquid metal reflecting sky, horizon and dunes) as a sixth palette; white ink stays the default.

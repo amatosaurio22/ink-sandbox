@@ -179,7 +179,7 @@ function meta() {
     created: new Date().toISOString(),
     drops: ink.drops.length,
     bubbles: ink.bubbles.length,
-    ink: { ...ink.params, color: press.settings.ink, gloss: press.settings.gloss },
+    ink: { ...ink.params, color: press.settings.ink, finish: press.settings.finish, gloss: press.settings.gloss },
   };
 }
 
@@ -207,8 +207,9 @@ function readColors() {
   };
 }
 
-function setInk(ink, ground) {
+function setInk(ink, ground, finish = 'ink') {
   press.settings.ink = ink;
+  press.settings.finish = finish;
   if (ground) press.settings.ground = ground;
   const light = relativeLuminance(press.settings.ground) > 0.5;
   const root = document.documentElement.style;
@@ -217,7 +218,7 @@ function setInk(ink, ground) {
   body.classList.toggle('on-light', light);
   document.querySelector('meta[name="theme-color"]').setAttribute('content', press.settings.ground);
   $('inkPicker').value = ink;
-  $('inkHex').textContent = ink.toUpperCase();
+  $('inkHex').textContent = finish === 'chrome' ? t('palette.chrome') : ink.toUpperCase();
   readColors();
 }
 
@@ -236,7 +237,7 @@ function buildPalettes() {
     ...Press.PALETTES.map((p) => {
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'swatch';
+      b.className = p.finish ? `swatch swatch-${p.finish}` : 'swatch';
       b.setAttribute('role', 'radio');
       b.setAttribute('aria-checked', String(press.settings.ink === p.ink && press.settings.ground === p.ground));
       b.setAttribute('aria-label', t(`palette.${p.id}`));
@@ -244,7 +245,7 @@ function buildPalettes() {
       b.style.setProperty('--c', p.ink);
       b.style.setProperty('--g', p.ground);
       b.addEventListener('click', () => {
-        setInk(p.ink, p.ground);
+        setInk(p.ink, p.ground, p.finish);
         group.querySelectorAll('.swatch').forEach((s) => s.setAttribute('aria-checked', String(s === b)));
       });
       return b;
@@ -386,8 +387,8 @@ window.addEventListener('keydown', (e) => {
 function render(overlays = true) {
   Ink.computeField(ink);
   state.path = ink.drops.length ? toPathData(traceContours(ink, 1)) || null : null;
-  const spec = state.path && press.settings.gloss > 0.01 ? toPathData(traceContours(ink, SPEC_ISO)) || null : null;
-  Press.print(press, state.path, spec);
+  const spec = state.path && press.settings.finish !== 'chrome' && press.settings.gloss > 0.01 ? toPathData(traceContours(ink, SPEC_ISO)) || null : null;
+  Press.print(press, state.path, spec, ink);
 
   if (!overlays) return;
   if (state.guides) Press.drawGuides(press, ink, state.colors.line, state.colors.accent);

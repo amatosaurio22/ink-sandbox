@@ -702,12 +702,13 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px;
+  gap: 8px;
+  padding: 12px 10px;
 }
 
 .swatches {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .swatch {
@@ -720,6 +721,12 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   background: radial-gradient(circle, var(--c) 0 52%, var(--g) 55%);
   box-shadow: inset 0 0 0 0.5px rgba(128, 128, 128, 0.5);
   transition: transform 0.2s var(--spring);
+}
+
+.swatch-chrome {
+  background:
+    radial-gradient(circle, transparent 0 52%, var(--g) 55%),
+    linear-gradient(#607aa0, #d6c6ba 32%, #fff6e4 50%, #26160e 53%, #a86636 72%, #f8d29c);
 }
 
 .swatch:hover {

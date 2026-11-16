@@ -15,7 +15,8 @@ Drop ink that fuses into liquid shapes, blow air bubbles into it, and export the
 - **Dropper.** Click for a drop, hold to let it grow, drag to draw a stroke that thins with speed.
 - **Air.** Blow bubbles into ink that is already there. Hold to inflate one, drag to leave foam. Bubbles are real holes: they push the ink aside, move with it, and pop when the ink around them is gone.
 - **Move and Eraser.** Stretch and gather the ink, or remove it.
-- **Ink settings.** Cohesion, volume, motion, memory and gloss, five colors plus a custom one.
+- **Desert Chrome.** A liquid-metal finish: the ink reflects a desert, sky above a hard horizon and dunes below, bending over every shape and bubble.
+- **Ink settings.** Cohesion, volume, motion, memory and gloss, six finishes plus a custom color.
 - **Export.** SVG is one compound path, bubbles kept as holes, with every setting stored in `<metadata>`. PNG keeps the gloss.
 - Up to 1,000 drops, 50-step undo, pause, a structure view, Spanish and English, mouse, touch and pen.
 
@@ -44,7 +45,8 @@ pointer → drops (position, anchor, radius) and bubbles (position, radius)
 2. **The field** sums a smooth falloff per drop. A little noise is added only near the edge, so the outline moves without drifting.
 3. **Bubbles** multiply the field by a soft radial mask and push nearby drops outward, so the ink makes lasting room for the air.
 4. **The outline** is traced with marching squares and turned into Bézier curves. The canvas fills that exact path, so what you see is what you export.
-5. **Gloss** reuses the outline: shifted towards and away from the light it gives a soft shadow and a lit rim, and tracing the field again where the ink is thickest gives the reflections.
+5. **Desert Chrome** reads the field as a height map, smooths it, and gives every pixel a surface normal. The normal picks what that point reflects, like a matcap: up-facing metal sees sky, down-facing sees dunes, and a low sun leaves a glint.
+6. **Gloss** reuses the outline: shifted towards and away from the light it gives a soft shadow and a lit rim, and tracing the field again where the ink is thickest gives the reflections.
 
 No framework, no build step, no dependencies: Canvas 2D, Pointer Events and ES modules. A frame with 1,000 drops takes about 3 ms of simulation.
 
@@ -85,7 +87,8 @@ Soltá gotas de tinta que se funden en formas líquidas, soplales burbujas de ai
 - **Gotero.** Un clic suelta una gota, mantener la hace crecer, arrastrar dibuja un trazo que se afina con la velocidad.
 - **Aire.** Soplá burbujas dentro de la tinta. Mantené para inflar, arrastrá para hacer espuma. Son huecos reales: corren la tinta, se mueven con ella y explotan si se quedan sin tinta alrededor.
 - **Mover y Goma.** Estirá y juntá la tinta, o borrala.
-- **Ajustes de tinta.** Cohesión, volumen, movimiento, memoria y brillo, cinco colores y uno a elección.
+- **Cromo desierto.** Un acabado de metal líquido: la tinta refleja un desierto, cielo arriba de un horizonte nítido y dunas abajo, curvándose sobre cada forma y burbuja.
+- **Ajustes de tinta.** Cohesión, volumen, movimiento, memoria y brillo, seis acabados y un color a elección.
 - **Exportar.** El SVG es un solo trazado con las burbujas como huecos y los ajustes guardados en `<metadata>`. El PNG incluye el brillo.
 - Hasta 1.000 gotas, 50 pasos de deshacer, pausa, vista de estructura, español e inglés, mouse, touch y lápiz.
 
