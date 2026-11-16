@@ -17,7 +17,7 @@ Drop ink that fuses into liquid shapes, blow air bubbles into it, and export the
 - **Move and Eraser.** Stretch and gather the ink, or remove it.
 - **Desert Chrome.** A liquid-metal finish: the ink reflects a desert, sky above a hard horizon and dunes below, bending over every shape and bubble.
 - **Ink settings.** Cohesion, volume, motion, memory and gloss, six finishes plus a custom color.
-- **Export.** SVG is one compound path, bubbles kept as holes, with every setting stored in `<metadata>`. PNG keeps the gloss.
+- **Export as PNG or SVG** from the Export menu. SVG is one compound path, bubbles kept as holes, with every setting stored in `<metadata>`. PNG saves the canvas exactly as shown, chrome and gloss included.
 - Up to 1,000 drops, 50-step undo, pause, a structure view, Spanish and English, mouse, touch and pen.
 
 | Key | Action |
@@ -28,6 +28,7 @@ Drop ink that fuses into liquid shapes, blow air bubbles into it, and export the
 | `R` | Vary shape |
 | `G` | Show structure |
 | `C` | Clear all |
+| `P` | Export PNG |
 | `S` | Export SVG |
 | Scroll | Brush size |
 
@@ -89,7 +90,7 @@ Soltá gotas de tinta que se funden en formas líquidas, soplales burbujas de ai
 - **Mover y Goma.** Estirá y juntá la tinta, o borrala.
 - **Cromo desierto.** Un acabado de metal líquido: la tinta refleja un desierto, cielo arriba de un horizonte nítido y dunas abajo, curvándose sobre cada forma y burbuja.
 - **Ajustes de tinta.** Cohesión, volumen, movimiento, memoria y brillo, seis acabados y un color a elección.
-- **Exportar.** El SVG es un solo trazado con las burbujas como huecos y los ajustes guardados en `<metadata>`. El PNG incluye el brillo.
+- **Exportá en PNG o SVG** desde el menú Exportar. El SVG es un solo trazado con las burbujas como huecos y los ajustes guardados en `<metadata>`. El PNG guarda el lienzo tal como se ve, con el cromo y el brillo.
 - Hasta 1.000 gotas, 50 pasos de deshacer, pausa, vista de estructura, español e inglés, mouse, touch y lápiz.
 
 Para correrlo localmente: `python3 -m http.server 5173` y abrí <http://localhost:5173>.

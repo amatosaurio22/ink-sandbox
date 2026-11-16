@@ -184,13 +184,24 @@ function meta() {
   };
 }
 
+function setExportMenu(open) {
+  const menu = $('exportMenu');
+  const btn = $('btnExport');
+  if (open === !menu.hidden) return;
+  menu.hidden = !open;
+  btn.setAttribute('aria-expanded', String(open));
+  if (open) menu.querySelector('.export-item').focus();
+}
+
 function exportSVG() {
+  setExportMenu(false);
   if (!state.path) return toast(t('nothing'));
   Press.exportSVG(press, state.path, meta());
   toast(t('exported'));
 }
 
 function exportPNG() {
+  setExportMenu(false);
   if (!state.path) return toast(t('nothing'));
   render(false);
   Press.exportPNG(press);
@@ -379,7 +390,10 @@ window.addEventListener('keydown', (e) => {
     case 'g': toggleGuides(); break;
     case 'c': clearPaper(); break;
     case 's': exportSVG(); break;
-    case 'escape': if (body.classList.contains('panel-open')) setPanel(false); break;
+    case 'p': exportPNG(); break;
+    case 'escape':
+      if (!$('exportMenu').hidden) { setExportMenu(false); $('btnExport').focus(); break; }
+      if (body.classList.contains('panel-open')) setPanel(false); break;
   }
 });
 
@@ -464,6 +478,17 @@ function boot() {
   $('btnMutate').addEventListener('click', mutate);
   $('btnFreeze').addEventListener('click', toggleFreeze);
   $('btnSVG').addEventListener('click', exportSVG);
+  $('btnExport').addEventListener('click', () => setExportMenu($('exportMenu').hidden));
+  $('exportMenu').addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    e.preventDefault();
+    const items = [...$('exportMenu').querySelectorAll('.export-item')];
+    const i = items.indexOf(document.activeElement);
+    items[(i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length].focus();
+  });
+  document.addEventListener('pointerdown', (e) => {
+    if (!e.target.closest('.export-wrap')) setExportMenu(false);
+  });
   $('btnPNG').addEventListener('click', exportPNG);
   $('panelToggle').addEventListener('click', () => {
     const open = !body.classList.contains('panel-open');

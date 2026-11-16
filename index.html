@@ -64,7 +64,13 @@
           <span class="lang-opt" data-lang="es">ES</span><span class="lang-opt" data-lang="en">EN</span>
         </button>
       </div>
-      <button class="btn-export" id="btnSVG" data-i18n-title="export.svg.title"><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg><span data-i18n="export.svg">Exportar SVG</span></button>
+      <div class="export-wrap">
+        <button class="btn-export" id="btnExport" aria-haspopup="menu" aria-expanded="false" aria-controls="exportMenu" data-i18n-title="export.title"><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg><span data-i18n="export">Exportar</span></button>
+        <div class="export-menu glass" id="exportMenu" role="menu" hidden>
+          <button class="export-item" id="btnPNG" role="menuitem" data-i18n-title="export.png.title"><span class="export-fmt">PNG</span><span class="export-sub" data-i18n="export.png.sub">Imagen, tal como se ve</span><kbd>P</kbd></button>
+          <button class="export-item" id="btnSVG" role="menuitem" data-i18n-title="export.svg.title"><span class="export-fmt">SVG</span><span class="export-sub" data-i18n="export.svg.sub">Vector editable</span><kbd>S</kbd></button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -140,7 +146,6 @@
       </section>
 
       <section class="group-wrap">
-        <button class="btn" id="btnPNG" data-i18n-title="export.png.title"><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg><span data-i18n="export.png">Exportar PNG</span></button>
         <p class="keys"><span data-i18n="keys.list"></span></p>
         <p class="panel-credit"><span data-i18n="credits">Hecho por</span> <a class="author-link" rel="author">Agustín Amato</a></p>
       </section>
